@@ -1,0 +1,10 @@
+
+set(IAESandbox_Sources
+    imp/cpp/Main.cpp
+)
+
+add_executable(IAESandbox ${IAESandbox_Sources})
+
+target_include_directories(IAESandbox PRIVATE imp/hpp)
+
+target_link_libraries(IAESandbox PRIVATE IAEngine)

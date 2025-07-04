@@ -1,0 +1,3 @@
+[submodule "Dependencies/IACore"]
+	path = Dependencies/IACore
+	url = https://git.iasoft.dev/dev0/IACore
