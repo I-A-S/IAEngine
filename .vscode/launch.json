@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/build/bin/IAESandbox.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/",
+            "cwd": "${workspaceFolder}/Src/IAESandbox",
             "environment": [],
             "preLaunchTask": "build",
             "console": "integratedTerminal"

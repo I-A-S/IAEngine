@@ -9,7 +9,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 project(IAEngine)
 
+add_subdirectory(Vendor/)
+
 add_subdirectory(Dependencies/IACore)
+add_subdirectory(Dependencies/IAMath)
 
 add_subdirectory(Src/IAEngine)
 add_subdirectory(Src/IAESandbox)

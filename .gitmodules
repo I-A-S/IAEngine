@@ -1,3 +1,15 @@
 [submodule "Dependencies/IACore"]
 	path = Dependencies/IACore
 	url = https://git.iasoft.dev/dev0/IACore
+[submodule "Vendor/SDL"]
+	path = Vendor/SDL
+	url = https://github.com/libsdl-org/SDL
+[submodule "Vendor/SDL_Mixer"]
+	path = Vendor/SDL_Mixer
+	url = https://github.com/libsdl-org/SDL_mixer
+[submodule "Vendor/imgui"]
+	path = Vendor/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "Dependencies/IAMath"]
+	path = Dependencies/IAMath
+	url = https://git.iasoft.dev/dev0/IAMath
