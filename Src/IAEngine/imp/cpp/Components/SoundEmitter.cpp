@@ -36,7 +36,7 @@ namespace ia::iae
     VOID SoundEmitterComponent::SetSound(IN CONST Sound &sound)
     {
         m_activeSound = sound;
-        if(m_trackHandle == INVALID_HANDLE) return;
+        if((m_trackHandle == INVALID_HANDLE) || (m_activeSound.DataHandle() == INVALID_HANDLE)) return;
         Audio::QueueTrackData(m_trackHandle, sound.DataHandle());
         Audio::PlayTrack(m_trackHandle, sound.LoopTimes(), sound.LoopDelay());
     }

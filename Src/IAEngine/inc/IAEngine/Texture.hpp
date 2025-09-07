@@ -50,5 +50,6 @@ namespace ia::iae
 
       private:
         friend class Engine;
+        friend class ResourceManager;
     };
 } // namespace ia::iae

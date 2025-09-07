@@ -16,10 +16,10 @@
 
 #pragma once
 
-#include <iacore/vector.hpp>
-#include <iacore/memory.hpp>
-#include <iacore/string.hpp>
-#include <iacore/exception.hpp>
+#include <IACore/Vector.hpp>
+#include <IACore/Memory.hpp>
+#include <IACore/String.hpp>
+#include <IACore/Exception.hpp>
 
 #include <IAMath/Vec.hpp>
 

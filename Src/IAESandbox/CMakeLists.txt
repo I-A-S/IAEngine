@@ -1,6 +1,9 @@
 
 set(IAESandbox_Sources
     imp/cpp/Main.cpp
+    imp/cpp/Game.cpp
+    imp/cpp/Map.cpp
+    imp/cpp/Player.cpp
 )
 
 add_executable(IAESandbox ${IAESandbox_Sources})

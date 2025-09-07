@@ -16,52 +16,37 @@
 
 #pragma once
 
-#include <IAEngine/Nodes/Node.hpp>
-#include <IAEngine/Scene.hpp>
+#include <IAEngine/Audio.hpp>
 #include <IAEngine/Texture.hpp>
 
 namespace ia::iae
 {
-    struct EngineContext;
+    class Engine;
 
-    class Engine
+    class ResourceManager
     {
       public:
-        struct InitConfig
+        RefPtr<Texture> CreateTexture(IN CONST Span<CONST UINT8> &encodedData);
+        RefPtr<Texture> CreateTexture(IN PCUINT8 encodedData, IN SIZE_T encodedDataSize);
+        RefPtr<Texture> CreateTexture(IN PCUINT8 rgbaData, IN INT32 width, IN INT32 height);
+
+      public:
+        Sound CreateSound(IN PCUINT8 audioData, IN SIZE_T audioDataSize)
         {
-            String GameName{"IAEngine Game"};
-            INT32 WindowWidth{800};
-            INT32 WindowHeight{600};
-        };
+            return Audio::CreateSound(audioData, audioDataSize);
+        }
 
-      public:
-        Engine();
-        ~Engine();
+        Sound CreateSound(IN CONST Vector<UINT8> &audioData)
+        {
+            return CreateSound(audioData.data(), audioData.size());
+        }
 
-        BOOL Initialize(IN CONST InitConfig &config);
-        VOID Terminate();
-
-        VOID BeginFrame();
-        VOID EndFrame();
-        BOOL ShouldClose();
-
-      public:
-        RefPtr<Scene> CreateScene();
-
-        VOID ChangeScene(IN RefPtr<Scene> scene);
-
-      public:
-        PVOID GetRendererHandle() CONST;
+      protected:
+        Engine *CONST m_engine;
 
       private:
-        VOID RenderDebugUI();
-        VOID ProcessEvents();
-        VOID UpdateGame();
-        VOID RenderGame();
+        ResourceManager(IN Engine *engine);
 
-      private:
-        FLOAT32 m_updateTimer{};
-        RefPtr<Scene> m_activeScene{};
-        CONST RefPtr<EngineContext> m_context;
+        friend class Engine;
     };
 } // namespace ia::iae

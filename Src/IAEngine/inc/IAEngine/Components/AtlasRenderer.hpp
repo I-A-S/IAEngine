@@ -16,52 +16,41 @@
 
 #pragma once
 
-#include <IAEngine/Nodes/Node.hpp>
-#include <IAEngine/Scene.hpp>
+#include <IAEngine/Components/Component.hpp>
 #include <IAEngine/Texture.hpp>
 
 namespace ia::iae
 {
-    struct EngineContext;
-
-    class Engine
+    class AtlasRendererComponent : public IComponent
     {
       public:
-        struct InitConfig
+        struct TileGrid
         {
-            String GameName{"IAEngine Game"};
-            INT32 WindowWidth{800};
-            INT32 WindowHeight{600};
+            INT32 TileWidth{};
+            INT32 TileHeight{};
+            INT32 TileCountX{};
+            INT32 TileCountY{};
+
+            Vector<Handle> m_tileTextures{};
+
+            friend class AtlasRendererComponent;
         };
 
       public:
-        Engine();
-        ~Engine();
-
-        BOOL Initialize(IN CONST InitConfig &config);
-        VOID Terminate();
-
-        VOID BeginFrame();
-        VOID EndFrame();
-        BOOL ShouldClose();
+        AtlasRendererComponent(IN Node *node);
 
       public:
-        RefPtr<Scene> CreateScene();
+        Handle AddTexture(IN RefPtr<Texture> texture);
 
-        VOID ChangeScene(IN RefPtr<Scene> scene);
+        VOID SetGrid(IN CONST TileGrid &grid);
+        VOID SetGridTileTexture(IN INT32 x, IN INT32 y, IN Handle textureHandle);
 
       public:
-        PVOID GetRendererHandle() CONST;
+        VOID Draw();
+        VOID Update();
 
       private:
-        VOID RenderDebugUI();
-        VOID ProcessEvents();
-        VOID UpdateGame();
-        VOID RenderGame();
-
-      private:
-        FLOAT32 m_updateTimer{};
-        RefPtr<Scene> m_activeScene{};
-        CONST RefPtr<EngineContext> m_context;
+        TileGrid m_tileGrid{};
+        Vector<RefPtr<Texture>> m_textures;
     };
 } // namespace ia::iae

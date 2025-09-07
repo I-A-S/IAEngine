@@ -31,9 +31,17 @@ namespace ia::iae
         Animation anim;
         anim.ShouldLoop = shouldLoop;
         for (const auto &idx : frames)
-        {
             anim.Keys.pushBack(AnimationKeyFrame{.Duration = frameDuration, .TextureHandle = idx});
-        }
+        return AddAnimation(anim);
+    }
+
+    Handle SpriteRendererComponent::AddAnimation(IN INT32 startFrame, IN INT32 endFrame, IN INT32 frameDuration,
+                                                 IN BOOL shouldLoop)
+    {
+        Animation anim;
+        anim.ShouldLoop = shouldLoop;
+        for (INT32 i = startFrame; i < endFrame; i++)
+            anim.Keys.pushBack(AnimationKeyFrame{.Duration = frameDuration, .TextureHandle = i});
         return AddAnimation(anim);
     }
 
@@ -47,21 +55,26 @@ namespace ia::iae
         }
         if (m_animations.size())
             SetActiveAnimation(0);
+        else
+            SetActiveTexture(0);
     }
 
     VOID SpriteRendererComponent::SetActiveTexture(IN Handle texture)
     {
         IA_RELEASE_ASSERT((texture != INVALID_HANDLE) && (texture < m_textures.size()));
+        m_currentAnimationState.TextureHandle = texture;
     }
 
     VOID SpriteRendererComponent::SetActiveAnimation(IN Handle animation)
     {
+        if(animation == m_activeAnimationHandle) return;
         IA_RELEASE_ASSERT((animation != INVALID_HANDLE) && (animation < m_animations.size()));
         m_prevAnimationKeyFrameIndex = 0;
         m_activeAnimation = m_animations[animation];
         m_prevAnimationKeyFrame = m_activeAnimation.Keys[m_prevAnimationKeyFrameIndex + 0];
         m_nextAnimationKeyFrame = m_activeAnimation.Keys[m_prevAnimationKeyFrameIndex + 1];
         m_currentAnimationState = m_prevAnimationKeyFrame;
+        m_activeAnimationHandle = animation;
     }
 
     VOID SpriteRendererComponent::Update()
@@ -75,7 +88,7 @@ namespace ia::iae
         if (animFrame.TextureHandle == INVALID_HANDLE)
             return;
         m_textures[animFrame.TextureHandle]->Draw(
-            m_node->GetPosition() + animFrame.Position, m_node->GetScale() + animFrame.Scale,
+            m_node->GetPosition() + animFrame.Position, m_node->GetScale() * animFrame.Scale,
             m_node->GetRotation().Z + animFrame.Rotation.Z, m_isFlippedH, m_isFlippedV, animFrame.ColorOverlay);
     }
 
@@ -90,7 +103,7 @@ namespace ia::iae
             const auto t = m_timelinePosition / m_prevAnimationKeyFrame.Duration;
 #define INTERP_PROPERTY(name)                                                                                          \
     m_currentAnimationState.name = iam::Lerp(m_prevAnimationKeyFrame.name, m_nextAnimationKeyFrame.name, t);
-            
+
             INTERP_PROPERTY(Position);
             INTERP_PROPERTY(Rotation);
             INTERP_PROPERTY(Scale);
@@ -103,7 +116,7 @@ namespace ia::iae
         if (m_timelinePosition >= m_prevAnimationKeyFrame.Duration)
         {
             m_prevAnimationKeyFrameIndex = (m_prevAnimationKeyFrameIndex + 1) % (keyCount - 1);
-            if(!m_prevAnimationKeyFrameIndex && !m_activeAnimation.ShouldLoop)
+            if (!m_prevAnimationKeyFrameIndex && !m_activeAnimation.ShouldLoop)
             {
                 m_activeAnimation = {};
                 return;

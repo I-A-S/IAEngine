@@ -47,6 +47,7 @@ namespace ia::iae
         Handle AddTexture(IN RefPtr<Texture> texture);
         Handle AddAnimation(IN CONST Animation &animation);
         Handle AddAnimation(IN initializer_list<INT32> frames, IN INT32 frameDuration, IN BOOL shouldLoop);
+        Handle AddAnimation(IN INT32 startFrame, IN INT32 endFrame, IN INT32 frameDuration, IN BOOL shouldLoop);
 
         VOID BakeAnimations();
 
@@ -65,6 +66,7 @@ namespace ia::iae
         BOOL m_isFlippedH{false};
         FLOAT32 m_timelinePosition{};
         Animation m_activeAnimation{};
+        Handle m_activeAnimationHandle{INVALID_HANDLE};
         Vector<Animation> m_animations;
         Vector<RefPtr<Texture>> m_textures;
         AnimationKeyFrame m_currentAnimationState{};

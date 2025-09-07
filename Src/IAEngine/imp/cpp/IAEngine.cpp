@@ -1,11 +1,8 @@
 #include <IAEngine/Audio.hpp>
 #include <IAEngine/IAEngine.hpp>
 #include <IAEngine/Random.hpp>
+#include <IAEngine/Input.hpp>
 #include <IAEngine/Time.hpp>
-
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 #include <SDL3/SDL.h>
 
@@ -78,6 +75,7 @@ namespace ia::iae
 
         Time::Initialize();
         Random::Initialize();
+        Input::Initialize();
         Audio::Initialize();
 
         return true;
@@ -142,6 +140,7 @@ namespace ia::iae
 
     VOID Engine::ProcessEvents()
     {
+        Input::OnEvent(&m_context->Event);
     }
 
     VOID Engine::UpdateGame()
@@ -169,44 +168,5 @@ namespace ia::iae
     PVOID Engine::GetRendererHandle() CONST
     {
         return m_context->Renderer;
-    }
-} // namespace ia::iae
-
-namespace ia::iae
-{
-    RefPtr<Texture> Engine::CreateTexture(IN CONST Span<CONST UINT8> &encodedData)
-    {
-        return CreateTexture(encodedData.data(), encodedData.size());
-    }
-
-    RefPtr<Texture> Engine::CreateTexture(IN PCUINT8 encodedData, IN SIZE_T encodedDataSize)
-    {
-        INT32 w, h, nrChannels;
-        const auto pixels =
-            stbi_load_from_memory(encodedData, encodedDataSize, &w, &h, &nrChannels, STBI_rgb_alpha);
-        if (!pixels)
-            THROW_INVALID_DATA("Failed to decode the provided image data");
-        const auto result = CreateTexture((PCUINT8) pixels, w, h);
-        STBI_FREE(pixels);
-        return result;
-    }
-
-    RefPtr<Texture> Engine::CreateTexture(IN PCUINT8 rgbaData, IN INT32 width, IN INT32 height)
-    {
-        const auto result = MakeRefPtr<Texture>(this);
-
-        result->m_width = width;
-        result->m_height = height;
-
-        SDL_Surface *surface =
-            SDL_CreateSurfaceFrom(width, height, SDL_PIXELFORMAT_RGBA32, (void *) rgbaData, width << 2);
-        if (!surface)
-            THROW_UNKNOWN("Failed to create SDL surface: ", SDL_GetError());
-        result->m_handle = SDL_CreateTextureFromSurface(m_context->Renderer, surface);
-        if (!result->m_handle)
-            THROW_UNKNOWN("Failed to create SDL Texture: ", SDL_GetError());
-        SDL_DestroySurface(surface);
-
-        return result;
     }
 } // namespace ia::iae

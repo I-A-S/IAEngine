@@ -64,11 +64,6 @@ namespace ia::iae
         STATIC VOID Initialize();
         STATIC VOID Terminate();
 
-        STATIC Sound CreateSound(IN CONST Vector<UINT8> &audioData)
-        {
-            return CreateSound(audioData.data(), audioData.size());
-        }
-
         STATIC Sound CreateSound(IN PCUINT8 audioData, IN SIZE_T audioDataSize);
 
         STATIC INT64 CreateTrack();
