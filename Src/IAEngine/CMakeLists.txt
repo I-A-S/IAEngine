@@ -7,13 +7,20 @@ set(IAEngine_Sources
     imp/cpp/Input.cpp
     imp/cpp/Scene.cpp
     imp/cpp/Random.cpp
+
     imp/cpp/ResourceManager.cpp
+
     imp/cpp/Events/Event.cpp
+
     imp/cpp/Nodes/Transform.cpp
     imp/cpp/Nodes/Node.cpp
+
     imp/cpp/Components/AtlasRenderer.cpp
     imp/cpp/Components/SpriteRenderer.cpp
     imp/cpp/Components/SoundEmitter.cpp
+    imp/cpp/Components/Collider.cpp
+    imp/cpp/Components/ParticleEmitter.cpp
+    imp/cpp/Components/StackedCollider.cpp
 )
 
 add_library(IAEngine STATIC ${IAEngine_Sources})
