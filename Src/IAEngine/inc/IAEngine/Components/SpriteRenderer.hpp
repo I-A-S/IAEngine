@@ -32,7 +32,7 @@ namespace ia::iae
             iam::Vec3f Scale{1.0f, 1.0f, 1.0f};
             iam::Vec4f ColorOverlay{1.0f, 1.0f, 1.0f, 1.0f};
             BOOL ShouldInterpolate{};
-            INT32 TextureHandle{INVALID_HANDLE};
+            RefPtr<Texture> Texture;
         };
 
         struct Animation
@@ -44,14 +44,10 @@ namespace ia::iae
       public:
         SpriteRendererComponent(IN Node *node);
 
-        Handle AddTexture(IN RefPtr<Texture> texture);
         Handle AddAnimation(IN CONST Animation &animation);
-        Handle AddAnimation(IN initializer_list<INT32> frames, IN INT32 frameDuration, IN BOOL shouldLoop);
-        Handle AddAnimation(IN INT32 startFrame, IN INT32 endFrame, IN INT32 frameDuration, IN BOOL shouldLoop);
 
         VOID BakeAnimations();
 
-        VOID SetActiveTexture(IN Handle texture);
         VOID SetActiveAnimation(IN Handle animation);
 
       public:
@@ -68,7 +64,6 @@ namespace ia::iae
         Animation m_activeAnimation{};
         Handle m_activeAnimationHandle{INVALID_HANDLE};
         Vector<Animation> m_animations;
-        Vector<RefPtr<Texture>> m_textures;
         AnimationKeyFrame m_currentAnimationState{};
         AnimationKeyFrame m_nextAnimationKeyFrame{};
         AnimationKeyFrame m_prevAnimationKeyFrame{};

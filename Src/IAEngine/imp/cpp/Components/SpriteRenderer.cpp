@@ -12,37 +12,11 @@ namespace ia::iae
     {
     }
 
-    Handle SpriteRendererComponent::AddTexture(IN RefPtr<Texture> texture)
-    {
-        m_textures.pushBack(texture);
-        return m_textures.size() - 1;
-    }
-
     Handle SpriteRendererComponent::AddAnimation(IN CONST Animation &animation)
     {
         IA_RELEASE_ASSERT(!animation.Keys.empty());
         m_animations.pushBack(animation);
         return m_animations.size() - 1;
-    }
-
-    Handle SpriteRendererComponent::AddAnimation(IN initializer_list<INT32> frames, IN INT32 frameDuration,
-                                                 IN BOOL shouldLoop)
-    {
-        Animation anim;
-        anim.ShouldLoop = shouldLoop;
-        for (const auto &idx : frames)
-            anim.Keys.pushBack(AnimationKeyFrame{.Duration = frameDuration, .TextureHandle = idx});
-        return AddAnimation(anim);
-    }
-
-    Handle SpriteRendererComponent::AddAnimation(IN INT32 startFrame, IN INT32 endFrame, IN INT32 frameDuration,
-                                                 IN BOOL shouldLoop)
-    {
-        Animation anim;
-        anim.ShouldLoop = shouldLoop;
-        for (INT32 i = startFrame; i < endFrame; i++)
-            anim.Keys.pushBack(AnimationKeyFrame{.Duration = frameDuration, .TextureHandle = i});
-        return AddAnimation(anim);
     }
 
     VOID SpriteRendererComponent::BakeAnimations()
@@ -55,14 +29,6 @@ namespace ia::iae
         }
         if (m_animations.size())
             SetActiveAnimation(0);
-        else
-            SetActiveTexture(0);
-    }
-
-    VOID SpriteRendererComponent::SetActiveTexture(IN Handle texture)
-    {
-        IA_RELEASE_ASSERT((texture != INVALID_HANDLE) && (texture < m_textures.size()));
-        m_currentAnimationState.TextureHandle = texture;
     }
 
     VOID SpriteRendererComponent::SetActiveAnimation(IN Handle animation)
@@ -85,9 +51,7 @@ namespace ia::iae
     VOID SpriteRendererComponent::Draw()
     {
         const auto &animFrame = m_currentAnimationState;
-        if (animFrame.TextureHandle == INVALID_HANDLE)
-            return;
-        m_textures[animFrame.TextureHandle]->Draw(
+        animFrame.Texture->Draw(
             m_node->GetPosition() + animFrame.Position, m_node->GetScale() * animFrame.Scale,
             m_node->GetRotation().Z + animFrame.Rotation.Z, m_isFlippedH, m_isFlippedV, animFrame.ColorOverlay);
     }

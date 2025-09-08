@@ -44,9 +44,7 @@ namespace ia::iae
       protected:
         Engine *CONST m_engine;
 
-      private:
         ResourceManager(IN Engine *engine);
-
         friend class Engine;
     };
 } // namespace ia::iae

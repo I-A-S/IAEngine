@@ -19,6 +19,7 @@
 #include <IAEngine/Nodes/Node.hpp>
 #include <IAEngine/Scene.hpp>
 #include <IAEngine/Texture.hpp>
+#include <IAEngine/ResourceManager.hpp>
 
 namespace ia::iae
 {
@@ -45,6 +46,9 @@ namespace ia::iae
         VOID EndFrame();
         BOOL ShouldClose();
 
+        template<typename _class_type>
+        _class_type* RegisterResourceManager();
+
       public:
         RefPtr<Scene> CreateScene();
 
@@ -63,5 +67,13 @@ namespace ia::iae
         FLOAT32 m_updateTimer{};
         RefPtr<Scene> m_activeScene{};
         CONST RefPtr<EngineContext> m_context;
+        RefPtr<ResourceManager> m_resourceManager;
     };
+
+    template<typename _class_type>
+    _class_type* Engine::RegisterResourceManager()
+    {
+        m_resourceManager = MakeRefPtr<_class_type>(this);
+        return (_class_type*)m_resourceManager.get();
+    }
 } // namespace ia::iae

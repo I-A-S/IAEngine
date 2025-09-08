@@ -1,7 +1,7 @@
 #include <IAEngine/Audio.hpp>
 #include <IAEngine/IAEngine.hpp>
-#include <IAEngine/Random.hpp>
 #include <IAEngine/Input.hpp>
+#include <IAEngine/Random.hpp>
 #include <IAEngine/Time.hpp>
 
 #include <SDL3/SDL.h>
