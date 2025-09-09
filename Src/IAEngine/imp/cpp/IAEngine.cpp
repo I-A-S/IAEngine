@@ -3,6 +3,7 @@
 #include <IAEngine/Input.hpp>
 #include <IAEngine/Random.hpp>
 #include <IAEngine/Time.hpp>
+#include <IAEngine/Physics/Physics.hpp>
 
 #include <SDL3/SDL.h>
 
@@ -77,6 +78,7 @@ namespace ia::iae
         Random::Initialize();
         Input::Initialize();
         Audio::Initialize();
+        Physics::Initialize();
 
         return true;
     }
@@ -85,6 +87,7 @@ namespace ia::iae
     {
         IAE_LOG_INFO("Shutting down IAEngine");
 
+        Physics::Terminate();
         Audio::Terminate();
 
         ImGui_ImplSDLRenderer3_Shutdown();
@@ -145,6 +148,8 @@ namespace ia::iae
 
     VOID Engine::UpdateGame()
     {
+        Physics::Update();
+
         if B_LIKELY (m_activeScene)
             m_activeScene->Update();
     }

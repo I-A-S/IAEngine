@@ -1,7 +1,6 @@
-#include <Player.hpp>
+#include <Ground.hpp>
 
 #include <IAEngine/Physics/Physics.hpp>
-#include <IAEngine/Input.hpp>
 
 #include <IACore/File.hpp>
 
@@ -9,43 +8,42 @@ namespace ia::iae::game
 {
     extern ResourceManager* g_resourceManager;
 
-    Handle m_id;
+    Handle m_id2;
 
-    Player::Player(IN Engine *engine) : m_engine(engine)
+    Ground::Ground(IN Engine *engine) : m_engine(engine)
     {
         m_spriteRenderer = AddComponent<SpriteRendererComponent>();
     }
 
-    VOID Player::OnAdded(IN Scene *scene)
+    VOID Ground::OnAdded(IN Scene *scene)
     {
         Node::OnAdded(scene);
 
         iae::SpriteRendererComponent::AnimationKeyFrame keyFrame{};
-        const auto d = File::ReadToVector("Graphics/green.png");
+        const auto d = File::ReadToVector("Graphics/red.png");
         keyFrame.Texture = g_resourceManager->CreateTexture(d.data(), d.size());
-        keyFrame.Scale = {0.2f, 0.2f, 1.0f};
+        keyFrame.Scale = {3.0f, 0.25f, 1.0f};
 
         m_spriteRenderer->AddAnimation({.ShouldLoop = true, .Keys = {keyFrame}});
         m_spriteRenderer->BakeAnimations();
 
-        m_id = Physics::CreateDynamicBody({GetPosition().X + 20, GetPosition().Y + 20});
-        Physics::AddBoxCollider(m_id, {40.0f, 40.0f});
+        m_id2 = Physics::CreateStaticBody({GetPosition().X + 300, GetPosition().Y + 25});
+        Physics::AddBoxCollider(m_id2, {600.0f, 50.0f});
     }
 
-    VOID Player::OnRemoved()
+    VOID Ground::OnRemoved()
     {
 
         Node::OnRemoved();
     }
 
-    VOID Player::Draw()
+    VOID Ground::Draw()
     {
         Node::Draw();
     }
 
-    VOID Player::Update()
+    VOID Ground::Update()
     {
         Node::Update();
-        SetLocalPosition(Physics::GetBodyPosition(m_id) - iam::Vec3f{20.0f, 20.0f, 0.0f});
     }
 } // namespace ia::iae::game

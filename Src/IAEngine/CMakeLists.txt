@@ -10,6 +10,8 @@ set(IAEngine_Sources
 
     imp/cpp/ResourceManager.cpp
 
+    imp/cpp/Physics/Physics.cpp
+
     imp/cpp/Events/Event.cpp
 
     imp/cpp/Nodes/Transform.cpp
@@ -18,9 +20,8 @@ set(IAEngine_Sources
     imp/cpp/Components/AtlasRenderer.cpp
     imp/cpp/Components/SpriteRenderer.cpp
     imp/cpp/Components/SoundEmitter.cpp
-    imp/cpp/Components/Collider.cpp
     imp/cpp/Components/ParticleEmitter.cpp
-    imp/cpp/Components/StackedCollider.cpp
+    imp/cpp/Components/PhysicsBody.cpp
 )
 
 add_library(IAEngine STATIC ${IAEngine_Sources})

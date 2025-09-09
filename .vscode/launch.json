@@ -5,16 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C/C++: debiug",
+            "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/IAESandbox.exe",
+            "program": "${workspaceFolder}/build/bin/Debug/IAESandbox.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/Src/IAESandbox",
+            "cwd": "${workspaceFolder}/Src/IAESandbox/Res",
             "environment": [],
-            "preLaunchTask": "build",
-            "console": "integratedTerminal"
+            "console": "externalTerminal",
+            "preLaunchTask": "CMake: build"
         }
+
     ]
 }

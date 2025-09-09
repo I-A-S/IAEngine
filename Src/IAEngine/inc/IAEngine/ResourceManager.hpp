@@ -26,6 +26,8 @@ namespace ia::iae
     class ResourceManager
     {
       public:
+        ResourceManager(IN Engine *engine);
+
         RefPtr<Texture> CreateTexture(IN CONST Span<CONST UINT8> &encodedData);
         RefPtr<Texture> CreateTexture(IN PCUINT8 encodedData, IN SIZE_T encodedDataSize);
         RefPtr<Texture> CreateTexture(IN PCUINT8 rgbaData, IN INT32 width, IN INT32 height);
@@ -44,7 +46,6 @@ namespace ia::iae
       protected:
         Engine *CONST m_engine;
 
-        ResourceManager(IN Engine *engine);
         friend class Engine;
     };
 } // namespace ia::iae

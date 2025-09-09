@@ -3,6 +3,7 @@ set(IAESandbox_Sources
     imp/cpp/Main.cpp
     imp/cpp/Game.cpp
     imp/cpp/Map.cpp
+    imp/cpp/Ground.cpp
     imp/cpp/Player.cpp
 )
 
