@@ -4,8 +4,8 @@ namespace ia::iae::game
 {
     TiledMap::TiledMap(IN Engine *engine) : m_engine(engine)
     {
-        m_musicEmitter = AddComponent<SoundEmitterComponent>();
-        m_atlasRenderer = AddComponent<AtlasRendererComponent>();
+        //m_musicEmitter = AddComponent<SoundEmitterComponent>();
+        //m_atlasRenderer = AddComponent<AtlasRendererComponent>();
     }
 
     VOID TiledMap::OnAdded(IN Scene *scene)

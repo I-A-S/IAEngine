@@ -22,6 +22,7 @@ set(IAEngine_Sources
     imp/cpp/Components/SoundEmitter.cpp
     imp/cpp/Components/ParticleEmitter.cpp
     imp/cpp/Components/PhysicsBody.cpp
+    imp/cpp/Components/TextureRenderer.cpp
 )
 
 add_library(IAEngine STATIC ${IAEngine_Sources})

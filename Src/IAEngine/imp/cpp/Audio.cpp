@@ -77,7 +77,7 @@ namespace ia::iae
 
     VOID Audio::ClearTrack(IN INT64 trackHandle)
     {
-        //MIX_StopTrack(g_tracks[trackHandle], 0);
+        MIX_StopTrack(g_tracks[trackHandle], 0);
     }
 
     VOID Audio::PauseTrack(IN INT64 trackHandle)

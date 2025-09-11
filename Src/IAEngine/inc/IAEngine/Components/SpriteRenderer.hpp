@@ -51,6 +51,27 @@ namespace ia::iae
         VOID SetActiveAnimation(IN Handle animation);
 
       public:
+        Vector<Animation> &Animations()
+        {
+            return m_animations;
+        }
+
+        CONST Vector<Animation> &Animations() CONST
+        {
+            return m_animations;
+        }
+
+        BOOL& IsFlippedV()
+        {
+            return m_isFlippedV;
+        }
+
+        BOOL& IsFlippedH()
+        {
+            return m_isFlippedH;
+        }
+
+      public:
         VOID Draw();
         VOID Update();
 

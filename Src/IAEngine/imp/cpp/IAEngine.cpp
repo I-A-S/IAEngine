@@ -1,9 +1,9 @@
 #include <IAEngine/Audio.hpp>
 #include <IAEngine/IAEngine.hpp>
 #include <IAEngine/Input.hpp>
+#include <IAEngine/Physics/Physics.hpp>
 #include <IAEngine/Random.hpp>
 #include <IAEngine/Time.hpp>
-#include <IAEngine/Physics/Physics.hpp>
 
 #include <SDL3/SDL.h>
 
@@ -132,6 +132,12 @@ namespace ia::iae
         Time::NextFrame();
     }
 
+    VOID Engine::AddDebugUIWindow(IN PCCHAR title, IN CONST iam::Vec2f &position, IN CONST iam::Vec2f &size,
+                                  IN std::function<VOID()> contentDrawCallback)
+    {
+        m_debugUIWindows.pushBack(DebugUIWindow{title, position, size, contentDrawCallback});
+    }
+
     BOOL Engine::ShouldClose()
     {
         return m_context->ShouldClose;
@@ -139,10 +145,18 @@ namespace ia::iae
 
     VOID Engine::RenderDebugUI()
     {
+        for (const auto &w : m_debugUIWindows) {
+            ImGui::Begin(w.Title);
+            ImGui::SetWindowPos({w.Position.X, w.Position.Y});
+            ImGui::SetWindowSize({w.Size.X, w.Size.Y});
+            w.ContentDrawCallback();
+            ImGui::End();
+        }
     }
 
     VOID Engine::ProcessEvents()
     {
+        ImGui_ImplSDL3_ProcessEvent(&m_context->Event);
         Input::OnEvent(&m_context->Event);
     }
 

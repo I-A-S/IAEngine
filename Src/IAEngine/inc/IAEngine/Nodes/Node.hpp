@@ -36,8 +36,13 @@ namespace ia::iae
         VIRTUAL VOID Disable();
 
       public:
+        VOID AddChild(IN RefPtr<Node> node);
+
         template<typename _component_type>
-        RefPtr<_component_type> AddComponent();
+        _component_type* AddComponent();
+
+        template<typename _component_type>
+        _component_type* GetComponent();
 
         CONST Vector<RefPtr<IComponent>>& GetComponents() CONST
         {
@@ -58,10 +63,22 @@ namespace ia::iae
     };
 
     template<typename _component_type>
-    RefPtr<_component_type> Node::AddComponent()
+    _component_type* Node::AddComponent()
     {
         const auto c = MakeRefPtr<_component_type>(this);
         AddComponent(c);
-        return c;
+        return c.get();
+    }
+
+    template<typename _component_type>
+    _component_type* Node::GetComponent()
+    {
+        for(auto& c: m_components)
+        {
+            _component_type* comp = dynamic_cast<_component_type*>(c.get());
+            if(comp)
+                return comp;
+        }
+        return nullptr;
     }
 } // namespace ia::iae

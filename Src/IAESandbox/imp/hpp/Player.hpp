@@ -22,6 +22,6 @@ namespace ia::iae::game
 
       private:
         Engine *CONST m_engine;
-        RefPtr<SpriteRendererComponent> m_spriteRenderer;
+        SpriteRendererComponent* m_spriteRenderer;
     };
 } // namespace ia::iae::game

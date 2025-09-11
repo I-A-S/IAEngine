@@ -17,6 +17,7 @@
 #pragma once
 
 #include <IAEngine/Components/SpriteRenderer.hpp>
+#include <IAEngine/Time.hpp>
 
 namespace ia::iae
 {
@@ -28,29 +29,24 @@ namespace ia::iae
         VOID AddAnimation(IN SpriteRendererComponent::Animation anim);
 
       public:
-        CONST INT32 &LifeTime() CONST
+        TimePeriod &LifeTime()
         {
             return m_lifeTime;
         }
 
-        CONST INT32 &CreationFrequency() CONST
+        TimePeriod &CreationDelay()
         {
-            return m_creationFrequency;
+            return m_creationDelay;
         }
 
-        CONST Vector<RefPtr<SpriteRendererComponent>> &Sprites() CONST
+        INT32 &InstanceLimit()
         {
-            return m_sprites;
+            return m_instanceLimit;
         }
 
-        INT32 &LifeTime()
+        INT32 &TimeLimit()
         {
-            return m_lifeTime;
-        }
-
-        INT32 &CreationFrequency()
-        {
-            return m_creationFrequency;
+            return m_timeLimit;
         }
 
         Vector<RefPtr<SpriteRendererComponent>> &Sprites()
@@ -63,8 +59,12 @@ namespace ia::iae
         VOID Update();
 
       private:
-        INT32 m_lifeTime{};
-        INT32 m_creationFrequency{};
+        BOOL m_isEmitting{true};
+        FLOAT32 m_timeline{};
+        INT32 m_timeLimit{};
+        INT32 m_instanceLimit{};
+        TimePeriod m_lifeTime{};
+        TimePeriod m_creationDelay{};
         Vector<RefPtr<SpriteRendererComponent>> m_sprites{};
     };
 } // namespace ia::iae

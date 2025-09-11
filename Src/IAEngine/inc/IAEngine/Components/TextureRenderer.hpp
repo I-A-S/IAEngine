@@ -21,38 +21,27 @@
 
 namespace ia::iae
 {
-    class AtlasRendererComponent : public IComponent
+    class TextureRendererComponent : public IComponent
     {
       public:
-        struct TileGrid
+        TextureRendererComponent(IN Node *node);
+
+        RefPtr<iae::Texture> &Texture()
         {
-            iam::Vec3f Position{};
-            
-            INT32 TileWidth{};
-            INT32 TileHeight{};
-            INT32 TileCountX{};
-            INT32 TileCountY{};
+            return m_texture;
+        }
 
-            Vector<Handle> m_tileTextures{};
-
-            friend class AtlasRendererComponent;
-        };
-
-      public:
-        AtlasRendererComponent(IN Node *node);
-
-      public:
-        Handle AddTexture(IN RefPtr<Texture> texture);
-
-        VOID SetGrid(IN CONST TileGrid &grid);
-        VOID SetGridTileTexture(IN INT32 x, IN INT32 y, IN Handle textureHandle);
+        iam::Vec3f &Position()
+        {
+            return m_position;
+        }
 
       public:
         VOID Draw();
         VOID Update();
 
       private:
-        TileGrid m_tileGrid{};
-        Vector<RefPtr<Texture>> m_textures;
+        iam::Vec3f m_position;
+        RefPtr<iae::Texture> m_texture;
     };
 } // namespace ia::iae

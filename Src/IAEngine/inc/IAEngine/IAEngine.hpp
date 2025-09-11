@@ -27,6 +27,14 @@ namespace ia::iae
 
     class Engine
     {
+        struct DebugUIWindow
+        {
+            PCCHAR Title{""};
+            iam::Vec2f Position{};
+            iam::Vec2f Size{};
+            std::function<VOID()> ContentDrawCallback{};
+        };
+        
       public:
         struct InitConfig
         {
@@ -45,6 +53,8 @@ namespace ia::iae
         VOID BeginFrame();
         VOID EndFrame();
         BOOL ShouldClose();
+
+        VOID AddDebugUIWindow(IN PCCHAR title, IN CONST iam::Vec2f &position, IN CONST iam::Vec2f &size, IN std::function<VOID()> contentDrawCallback);
 
         template<typename _class_type>
         _class_type* RegisterResourceManager();
@@ -68,6 +78,7 @@ namespace ia::iae
         RefPtr<Scene> m_activeScene{};
         CONST RefPtr<EngineContext> m_context;
         RefPtr<ResourceManager> m_resourceManager;
+        Vector<DebugUIWindow> m_debugUIWindows;
     };
 
     template<typename _class_type>

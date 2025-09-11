@@ -13,7 +13,28 @@ namespace ia::iae
     VOID Scene::Draw()
     {
         for (auto &n : m_nodes)
+        {
+            if (((INT32) n->GetPosition().Z) >= 0)
+                continue;
             n->Draw();
+        }
+
+        for (INT32 i = 0; i < 8; i++) // [IATODO]
+        {
+            for (auto &n : m_nodes)
+            {
+                if (((INT32) n->GetPosition().Z) != i)
+                    continue;
+                n->Draw();
+            }
+        }
+
+        for (auto &n : m_nodes)
+        {
+            if (((INT32) n->GetPosition().Z) < 8)
+                continue;
+            n->Draw();
+        }
     }
 
     VOID Scene::Update()
@@ -31,10 +52,10 @@ namespace ia::iae
     VOID Scene::RemoveNode(IN RefPtr<Node> node)
     {
         const auto it = m_nodes.find(node);
-        if(it != m_nodes.end())
+        if (it != m_nodes.end())
         {
             m_nodes.erase(it);
             node->OnRemoved();
-        }        
+        }
     }
 } // namespace ia::iae

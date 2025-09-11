@@ -20,11 +20,47 @@ namespace ia::iae
 
     VOID Node::Draw()
     {
-        for (auto &c : m_components)
-            c->Draw();
+        BOOL drew = false;
+        for (auto &n : m_children)
+        {
+            if (((INT32) n->GetPosition().Z) >= 0)
+                continue;
+            n->Draw();
+        }
 
-        for (auto &c : m_children)
-            c->Draw();
+        if(((INT32) GetPosition().Z) < 0)
+        {
+            for (auto &c : m_components)
+                c->Draw();
+        }
+
+        for (INT32 i = 0; i < 8; i++) // [IATODO]
+        {
+            for (auto &n : m_children)
+            {
+                if (((INT32) n->GetPosition().Z) != i)
+                    continue;
+                n->Draw();
+            }
+            if (((INT32) GetPosition().Z) == i)
+            {
+                for (auto &c : m_components)
+                    c->Draw();
+            }
+        }
+
+        for (auto &n : m_children)
+        {
+            if (((INT32) n->GetPosition().Z) < 8)
+                continue;
+            n->Draw();
+        }
+
+        if(((INT32) GetPosition().Z) > 8)
+        {
+            for (auto &c : m_components)
+                c->Draw();
+        }
     }
 
     VOID Node::Update()
@@ -48,6 +84,11 @@ namespace ia::iae
         m_isEnabled = false;
         for (auto &c : m_children)
             c->Disable();
+    }
+
+    VOID Node::AddChild(IN RefPtr<Node> node)
+    {
+        m_children.pushBack(node);
     }
 
     VOID Node::AddComponent(IN RefPtr<IComponent> component)

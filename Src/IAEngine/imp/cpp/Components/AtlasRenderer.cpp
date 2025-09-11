@@ -40,7 +40,7 @@ namespace ia::iae
             {
                 const auto t = m_tileGrid.m_tileTextures[x + (y * m_tileGrid.TileCountX)];
                 if (t != INVALID_HANDLE)
-                    m_textures[t]->Draw(p, {1.0f, 1.0f, 1.0f}, 0.0f, false, false, {1.0f, 1.0f, 1.0f, 1.0f});
+                    m_textures[t]->Draw(p + m_tileGrid.Position, {1.0f, 1.0f, 1.0f}, 0.0f, false, false, {1.0f, 1.0f, 1.0f, 1.0f});
                 p.X += m_tileGrid.TileWidth;
             }
             p.X = m_node->GetPosition().X;

@@ -16,13 +16,26 @@ namespace ia::iae
 
     VOID ParticleEmitterComponent::Draw()
     {
-        for(auto& s: m_sprites)
+        if (!m_isEmitting)
+            return;
+
+        for (auto &s : m_sprites)
             s->Draw();
     }
 
     VOID ParticleEmitterComponent::Update()
     {
-        for(auto& s: m_sprites)
+        if (!m_isEmitting)
+            return;
+
+        for (auto &s : m_sprites)
             s->Update();
+
+        m_timeline += Time::GetFrameDeltaTime();
+        if (m_timeline >= m_lifeTime.GetValue())
+        {
+            m_timeline = 0;
+            m_isEmitting = false;
+        }
     }
 } // namespace ia::iae

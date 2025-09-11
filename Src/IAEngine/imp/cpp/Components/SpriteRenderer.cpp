@@ -14,7 +14,8 @@ namespace ia::iae
 
     Handle SpriteRendererComponent::AddAnimation(IN CONST Animation &animation)
     {
-        IA_RELEASE_ASSERT(!animation.Keys.empty());
+        if(animation.Keys.empty())
+            return INVALID_HANDLE;
         m_animations.pushBack(animation);
         return m_animations.size() - 1;
     }
@@ -51,6 +52,7 @@ namespace ia::iae
     VOID SpriteRendererComponent::Draw()
     {
         const auto &animFrame = m_currentAnimationState;
+        if(!animFrame.Texture) return;
         animFrame.Texture->Draw(
             m_node->GetPosition() + animFrame.Position, m_node->GetScale() * animFrame.Scale,
             m_node->GetRotation().Z + animFrame.Rotation.Z, m_isFlippedH, m_isFlippedV, animFrame.ColorOverlay);
