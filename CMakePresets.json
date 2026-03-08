@@ -1,0 +1,85 @@
+{
+  "version": 4,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28
+  },
+  "configurePresets": [
+    {
+      "name": "IAEngine-x64-linux",
+      "displayName": "IAEngine Linux x64 (Clang)",
+      "inherits": "x64-linux",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/libauxid/cmake/toolchains/x64-linux-clang.cmake"
+      }
+    },
+    {
+      "name": "IAEngine-arm64-linux",
+      "displayName": "IAEngine Linux ARM64 (Clang Cross)",
+      "inherits": "arm64-linux",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/libauxid/cmake/toolchains/arm64-linux-clang.cmake"
+      }
+    },
+    {
+      "name": "IAEngine-x64-windows",
+      "displayName": "IAEngine Windows x64 (Clang)",
+      "inherits": "x64-windows",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/libauxid/cmake/toolchains/x64-windows-clang.cmake"
+      }
+    },
+    {
+      "name": "IAEngine-arm64-windows",
+      "displayName": "IAEngine Windows ARM64 (Clang Cross)",
+      "inherits": "arm64-windows",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/libauxid/cmake/toolchains/arm64-windows-clang.cmake"
+      }
+    },
+    {
+      "name": "IAEngine-x64-windows-cross",
+      "displayName": "IAEngine Windows x64 (Clang Cross Linux Host)",
+      "inherits": "x64-windows-cross",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/libauxid/cmake/toolchains/x64-windows-cross-clang.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "IAEngine-x64-linux",
+      "configurePreset": "IAEngine-x64-linux"
+    },
+    {
+      "name": "IAEngine-x64-windows",
+      "configurePreset": "IAEngine-x64-windows"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "IAEngine-x64-linux",
+      "configurePreset": "IAEngine-x64-linux",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "IAEngine-x64-windows",
+      "configurePreset": "IAEngine-x64-windows",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ],
+  "include": [
+    "libauxid/CMakePresets.json"
+  ]
+}
