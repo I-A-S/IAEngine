@@ -13,27 +13,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iaengine/engine.hpp>
+#pragma once
+
+#include <auxid/auxid.hpp>
+#include <auxid/containers/vec.hpp>
 
 namespace iae
 {
-  auto main() -> Result<void>
-  {
+  using namespace au;
 
-    return {};
-  }
+  using EntityID = u32;
+  static constexpr EntityID NULL_ENTITY = 0;
+
+  using ResourceID = u32;
+  static constexpr ResourceID NULL_RESOURCE = 0;
 } // namespace iae
-
-int main(int argc, char *argv[])
-{
-  au::auxid::MainThreadGuard _thread_guard;
-
-  const auto res = iae::main();
-  if (!res)
-  {
-    au::auxid::get_thread_logger().error("%s", res.error().c_str());
-    return -1;
-  }
-
-  return 0;
-}

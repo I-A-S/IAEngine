@@ -13,27 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iaengine/engine.hpp>
+#pragma once
+
+#include <iaengine/math.hpp>
 
 namespace iae
 {
-  auto main() -> Result<void>
+  struct StaticBodyComponent
   {
+  };
 
-    return {};
-  }
+  struct DynamicBodyComponent
+  {
+  };
 } // namespace iae
-
-int main(int argc, char *argv[])
-{
-  au::auxid::MainThreadGuard _thread_guard;
-
-  const auto res = iae::main();
-  if (!res)
-  {
-    au::auxid::get_thread_logger().error("%s", res.error().c_str());
-    return -1;
-  }
-
-  return 0;
-}

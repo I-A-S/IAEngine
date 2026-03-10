@@ -6,5 +6,13 @@ target_include_directories(IAEngine PUBLIC
 )
 target_include_directories(IAEngine PRIVATE hpp)
 
-target_link_libraries(IAEngine PUBLIC libauxid)
-target_link_libraries(IAEngine PRIVATE auxid_platform)
+target_link_libraries(IAEngine PUBLIC 
+    libauxid
+    glm::glm
+)
+
+target_link_libraries(IAEngine PRIVATE
+    auxid_platform
+    SDL3::SDL3
+    EnTT::EnTT
+)

@@ -13,27 +13,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iaengine/engine.hpp>
+#pragma once
+
+#include <iaengine/math.hpp>
 
 namespace iae
 {
-  auto main() -> Result<void>
+  struct Color
   {
+    u8 r{255};
+    u8 g{255};
+    u8 b{255};
+    u8 a{255};
 
-    return {};
-  }
+    static auto from_normalized(Vec4 v) -> Color
+    {
+      return Color{
+          .r = static_cast<u8>(v.x * 255.0f),
+          .g = static_cast<u8>(v.y * 255.0f),
+          .b = static_cast<u8>(v.z * 255.0f),
+          .a = static_cast<u8>(v.w * 255.0f),
+      };
+    }
+
+    [[nodiscard]] auto to_normalized() const -> Vec4
+    {
+      return Vec4(static_cast<f32>(r) / 255.0f, static_cast<f32>(g) / 255.0f, static_cast<f32>(b) / 255.0f,
+                  static_cast<f32>(a) / 255.0f);
+    }
+  };
 } // namespace iae
-
-int main(int argc, char *argv[])
-{
-  au::auxid::MainThreadGuard _thread_guard;
-
-  const auto res = iae::main();
-  if (!res)
-  {
-    au::auxid::get_thread_logger().error("%s", res.error().c_str());
-    return -1;
-  }
-
-  return 0;
-}

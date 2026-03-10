@@ -13,27 +13,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iaengine/engine.hpp>
+#pragma once
+
+#include <iaengine/math.hpp>
 
 namespace iae
 {
-  auto main() -> Result<void>
+  struct HeirachyComponent
   {
+    u32 parent = NULL_ENTITY;
+    u32 first_child = NULL_ENTITY;
+    u32 next_sibling = NULL_ENTITY;
+    u32 prev_sibling = NULL_ENTITY;
+  };
 
-    return {};
-  }
+  struct TransformComponentBase
+  {
+    Vec3 position;
+    Vec2 scale;
+    f32 rotation;
+  };
+
+  struct LocalTransformComponent : public TransformComponentBase
+  {
+  };
+
+  struct WorldTransformComponent : public TransformComponentBase
+  {
+  };
 } // namespace iae
-
-int main(int argc, char *argv[])
-{
-  au::auxid::MainThreadGuard _thread_guard;
-
-  const auto res = iae::main();
-  if (!res)
-  {
-    au::auxid::get_thread_logger().error("%s", res.error().c_str());
-    return -1;
-  }
-
-  return 0;
-}
