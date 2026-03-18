@@ -15,39 +15,9 @@
 
 #pragma once
 
-#include <iaengine/math.hpp>
+#include <iaengine/engine.hpp>
 
 namespace iae
 {
-  struct HierarchyComponent
-  {
-    u32 depth{};
-    EntityID parent{NULL_ENTITY};
-    EntityID first_child{NULL_ENTITY};
-    EntityID next_sibling{NULL_ENTITY};
-    EntityID prev_sibling{NULL_ENTITY};
-  };
 
-  struct TransformComponentBase
-  {
-    Vec3 position;
-    Vec2 scale;
-    f32 rotation;
-  };
-
-  struct LocalTransformComponent : public TransformComponentBase
-  {
-  };
-
-  struct WorldTransformComponent : public TransformComponentBase
-  {
-  };
-
-  struct DirtyTransformTag
-  {
-  };
-
-  struct HierarchyChangedTag
-  {
-  };
-} // namespace iae
+}

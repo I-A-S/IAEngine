@@ -19,35 +19,17 @@
 
 namespace iae
 {
-  struct HierarchyComponent
+  class RenderProvider
   {
-    u32 depth{};
-    EntityID parent{NULL_ENTITY};
-    EntityID first_child{NULL_ENTITY};
-    EntityID next_sibling{NULL_ENTITY};
-    EntityID prev_sibling{NULL_ENTITY};
-  };
+public:
+    auto create_texture(const u8 *rgba, i32 width, i32 height) -> Result<ResourceHandle>;
 
-  struct TransformComponentBase
-  {
-    Vec3 position;
-    Vec2 scale;
-    f32 rotation;
-  };
+private:
+    auto initialize() -> void;
+    auto terminate() -> void;
 
-  struct LocalTransformComponent : public TransformComponentBase
-  {
-  };
+    auto process_event(const SDL_Event &event) -> void;
 
-  struct WorldTransformComponent : public TransformComponentBase
-  {
-  };
-
-  struct DirtyTransformTag
-  {
-  };
-
-  struct HierarchyChangedTag
-  {
+    friend class Engine;
   };
 } // namespace iae

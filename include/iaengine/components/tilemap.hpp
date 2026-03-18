@@ -21,7 +21,7 @@ namespace iae
 {
   struct TilemapComponent
   {
-    ResourceID tilemap;
+    TextureAssetID tilemap;
     IVec2 cell_size;
     IVec2 grid_size;
     Vec<u32> tile_data;

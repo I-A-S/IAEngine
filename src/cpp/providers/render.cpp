@@ -13,41 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
-
-#include <iaengine/math.hpp>
+#include <iaengine/providers/render.hpp>
 
 namespace iae
 {
-  struct HierarchyComponent
+  auto RenderProvider::initialize() -> void
   {
-    u32 depth{};
-    EntityID parent{NULL_ENTITY};
-    EntityID first_child{NULL_ENTITY};
-    EntityID next_sibling{NULL_ENTITY};
-    EntityID prev_sibling{NULL_ENTITY};
-  };
+  }
 
-  struct TransformComponentBase
+  auto RenderProvider::terminate() -> void
   {
-    Vec3 position;
-    Vec2 scale;
-    f32 rotation;
-  };
+  }
 
-  struct LocalTransformComponent : public TransformComponentBase
+  auto RenderProvider::process_event(const SDL_Event &event) -> void
   {
-  };
+  }
 
-  struct WorldTransformComponent : public TransformComponentBase
+  auto RenderProvider::create_texture(const u8 *rgba, i32 width, i32 height) -> Result<ResourceHandle>
   {
-  };
-
-  struct DirtyTransformTag
-  {
-  };
-
-  struct HierarchyChangedTag
-  {
-  };
+  }
 } // namespace iae

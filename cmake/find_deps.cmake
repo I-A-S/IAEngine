@@ -22,4 +22,11 @@ FetchContent_Declare(
   OVERRIDE_FIND_PACKAGE
 )
 
-FetchContent_MakeAvailable(entt glm SDL)
+FetchContent_Declare(
+  STB_CMake
+  GIT_REPOSITORY https://github.com/I-A-S/stb-cmake
+  GIT_TAG        main
+  OVERRIDE_FIND_PACKAGE
+)
+
+FetchContent_MakeAvailable(entt glm SDL STB_CMake)

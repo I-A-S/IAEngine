@@ -13,15 +13,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include <iaengine/providers/input.hpp>
 
-#include <iaengine/color.hpp>
+#include <SDL3/SDL_events.h>
 
 namespace iae
 {
-  struct TextureComponent
+  auto InputProvider::process_event(const SDL_Event &event) -> void
   {
-    ResourceID texture;
-    Color color;
-  };
+    if (event.type == SDL_EVENT_KEY_DOWN)
+    {
+      if (!event.key.repeat)
+      {
+        m_keys_pressed_this_frame.push_back(event.key.scancode);
+        m_keys_held[event.key.scancode] = true;
+      }
+    }
+    else if (event.type == SDL_EVENT_KEY_UP)
+    {
+      m_keys_held[event.key.scancode] = false;
+    }
+
+    // [IATODO]: Mouse, Gamepad
+  }
 } // namespace iae

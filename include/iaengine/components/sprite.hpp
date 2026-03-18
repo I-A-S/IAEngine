@@ -15,14 +15,16 @@
 
 #pragma once
 
-#include <iaengine/components/texture.hpp>
+#include <iaengine/color.hpp>
 
 namespace iae
 {
   struct SpriteComponent
   {
-    struct AnimationFrame : public TextureComponent
+    struct AnimationFrame
     {
+      TextureAssetID texture;
+      Color color;
     };
 
     struct Animation

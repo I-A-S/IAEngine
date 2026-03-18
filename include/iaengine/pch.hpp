@@ -18,13 +18,22 @@
 #include <auxid/auxid.hpp>
 #include <auxid/containers/vec.hpp>
 
+#include <entt/entt.hpp>
+
+#include <SDL3/SDL_events.h>
+
 namespace iae
 {
   using namespace au;
 
-  using EntityID = u32;
-  static constexpr EntityID NULL_ENTITY = 0;
+  using EntityID = entt::entity;
+  static constexpr EntityID NULL_ENTITY = entt::null;
 
-  using ResourceID = u32;
-  static constexpr ResourceID NULL_RESOURCE = 0;
+  using AssetID = u32;
+  static constexpr AssetID NULL_ASSET = 0;
+
+  using ResourceHandle = u64;
+  static constexpr ResourceHandle NULL_RESOURCE = 0;
+
+  using EntityRegistry = entt::registry;
 } // namespace iae
