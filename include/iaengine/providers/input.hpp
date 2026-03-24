@@ -58,8 +58,9 @@ private:
     bool m_keys_consumed[512] = {false};
     Vec<u32> m_keys_pressed_this_frame;
 
-    auto initialize() -> void
+    auto initialize() -> Result<void>
     {
+      return {};
     }
 
     auto terminate() -> void

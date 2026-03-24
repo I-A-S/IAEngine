@@ -33,9 +33,10 @@ namespace iae
 
   auto Engine::initialize() -> Result<void>
   {
-    m_input_provider.initialize();
-    m_render_provider.initialize();
-    m_asset_provider.initialize();
+    AU_TRY_DISCARD(m_display_provider.initialize());
+    AU_TRY_DISCARD(m_input_provider.initialize());
+    AU_TRY_DISCARD(m_render_provider.initialize());
+    AU_TRY_DISCARD(m_asset_provider.initialize());
 
     return {};
   }
@@ -45,19 +46,31 @@ namespace iae
     m_asset_provider.terminate();
     m_render_provider.terminate();
     m_input_provider.terminate();
+    m_display_provider.terminate();
+  }
+
+  auto Engine::resize(i32 width, i32 height) -> void
+  {
+    m_display_provider.resize(width, height);
+    m_render_provider.resize(width, height);
   }
 
   auto Engine::iterate(f32 delta_time) -> void
   {
     g_transform_system.update(m_entity_registry);
 
-    auto view = m_entity_registry.view<DebugInfoComponent, WorldTransformComponent>();
-    for (auto entity : view)
-    {
-      const auto &t = view.get<WorldTransformComponent>(entity);
-      auxid::get_thread_logger().info("Entity (%s): Pos: (%.2f, %.2f, %.2f)", view.get<DebugInfoComponent>(entity).name,
-                                      t.position.x, t.position.y, t.position.z);
-    }
+    m_render_provider.begin_frame();
+
+    m_render_provider.end_frame();
+
+    // auto view = m_entity_registry.view<DebugInfoComponent, WorldTransformComponent>();
+    // for (auto entity : view)
+    //{
+    //   const auto &t = view.get<WorldTransformComponent>(entity);
+    //   auxid::get_thread_logger().info("Entity (%s): Pos: (%.2f, %.2f, %.2f)",
+    //   view.get<DebugInfoComponent>(entity).name,
+    //                                   t.position.x, t.position.y, t.position.z);
+    // }
   }
 
   auto Engine::process_events() -> void
@@ -72,6 +85,7 @@ namespace iae
         return;
       }
 
+      m_display_provider.process_event(event);
       m_input_provider.process_event(event);
       m_asset_provider.process_event(event);
       m_render_provider.process_event(event);

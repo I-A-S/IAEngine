@@ -1,6 +1,5 @@
 include(FetchContent)
 
-
 FetchContent_Declare(
   entt
   GIT_REPOSITORY https://github.com/skypjack/entt
@@ -29,4 +28,11 @@ FetchContent_Declare(
   OVERRIDE_FIND_PACKAGE
 )
 
-FetchContent_MakeAvailable(entt glm SDL STB_CMake)
+FetchContent_Declare(
+  DearImGui_CMake
+  GIT_REPOSITORY https://github.com/I-A-S/imgui-cmake
+  GIT_TAG        main
+  OVERRIDE_FIND_PACKAGE
+)
+
+FetchContent_MakeAvailable(entt glm SDL STB_CMake DearImGui_CMake)

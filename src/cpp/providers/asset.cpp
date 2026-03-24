@@ -23,8 +23,9 @@
 
 namespace iae
 {
-  auto AssetProvider::initialize() -> void
+  auto AssetProvider::initialize() -> Result<void>
   {
+    return {};
   }
 
   auto AssetProvider::terminate() -> void

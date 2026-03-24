@@ -19,20 +19,27 @@
 
 namespace iae
 {
-  class AssetProvider
+  class DisplayProvider
   {
 public:
-    auto create_texture_from_file(const char *path) -> Result<ResourceHandle>;
-    auto create_texture_from_memory(const void *data, usize data_length) -> Result<ResourceHandle>;
-    auto create_texture_from_memory_rgba(const u8 *data, i32 width, i32 height) -> Result<ResourceHandle>;
+    auto resize(i32 width, i32 height) -> void;
+
+public:
+    auto get_window_handle() -> void *
+    {
+      return m_window_handle;
+    }
+
+private:
+    void *m_window_handle{};
+    i32 m_width{800};
+    i32 m_height{600};
 
 private:
     auto initialize() -> Result<void>;
     auto terminate() -> void;
 
-    auto process_event(const SDL_Event &event) -> void
-    {
-    }
+    auto process_event(const SDL_Event &event) -> void;
 
     friend class Engine;
   };

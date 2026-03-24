@@ -18,6 +18,7 @@
 #include <iaengine/providers/asset.hpp>
 #include <iaengine/providers/input.hpp>
 #include <iaengine/providers/render.hpp>
+#include <iaengine/providers/display.hpp>
 
 namespace iae
 {
@@ -37,6 +38,8 @@ public:
     auto process_events() -> void;
     auto iterate(f32 delta_time) -> void;
 
+    auto resize(i32 width, i32 height) -> void;
+
 public:
     auto create_entity(String debug_name = "") -> EntityID;
     auto attach_entity_to_parent(EntityID entity, EntityID parent) -> void;
@@ -48,6 +51,11 @@ public:
     auto add_component_to_entity(EntityID entity, Args... args) -> void;
 
 public:
+    auto get_display_provider() -> DisplayProvider &
+    {
+      return m_display_provider;
+    }
+
     auto get_input_provider() -> InputProvider &
     {
       return m_input_provider;
@@ -67,6 +75,8 @@ private:
     InputProvider m_input_provider;
     AssetProvider m_asset_provider;
     RenderProvider m_render_provider;
+    DisplayProvider m_display_provider;
+
     EntityRegistry m_entity_registry;
 
 private:

@@ -19,6 +19,7 @@
 #include <iaengine/components/transform.hpp>
 
 #include <SDL3/SDL.h>
+#include <imgui.h>
 
 namespace iae
 {
@@ -30,7 +31,7 @@ namespace iae
   {
     Vec2 axis_input{};
 
-    auto &input = registry.ctx().get<InputProvider>();
+    auto &input = Engine::instance().get_input_provider();
     if (input.is_key_active(SDL_SCANCODE_W))
       axis_input.y += delta_time;
     if (input.is_key_active(SDL_SCANCODE_S))
@@ -56,27 +57,7 @@ namespace iae
   {
     auto &logger = auxid::get_thread_logger();
 
-    static constexpr u32 WINDOW_WIDTH = 800;
-    static constexpr u32 WINDOW_HEIGHT = 600;
-
-    SDL_Window *window{};
-
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
-      logger.error("failed to initialize SDL '%s'", SDL_GetError());
-      exit(-1);
-    }
-
-    window =
-        SDL_CreateWindow("WZEngine Sandbox", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
-
-    if (!window)
-    {
-      logger.error("failed to create SDL window '%s'", SDL_GetError());
-      exit(-1);
-    }
-    SDL_SetWindowRelativeMouseMode(window, true);
-    SDL_ShowWindow(window);
+    Engine::instance().resize(1200, 600);
 
     AU_TRY_DISCARD(Engine::instance().initialize());
 
@@ -107,10 +88,6 @@ namespace iae
     Engine::instance().terminate();
 
     logger.info("cleanly exited the engine");
-
-    SDL_DestroyWindow(window);
-
-    SDL_Quit();
 
     return {};
   }

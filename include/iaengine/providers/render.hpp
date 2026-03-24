@@ -22,10 +22,24 @@ namespace iae
   class RenderProvider
   {
 public:
+    auto resize(i32 width, i32 height, bool force_resize = false) -> void;
+
+public:
     auto create_texture(const u8 *rgba, i32 width, i32 height) -> Result<ResourceHandle>;
 
 private:
-    auto initialize() -> void;
+    i32 m_width{};
+    i32 m_height{};
+    void *m_imdraw_data{};
+    void *m_device_handle{};
+    void *m_cmdbuffer_handle{};
+    void *m_renderpass_handle{};
+
+private:
+    auto begin_frame() -> void;
+    auto end_frame() -> void;
+
+    auto initialize() -> Result<void>;
     auto terminate() -> void;
 
     auto process_event(const SDL_Event &event) -> void;
