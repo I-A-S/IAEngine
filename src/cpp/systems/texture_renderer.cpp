@@ -13,22 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
-
-#include <iaengine/components/texture.hpp>
+#include <systems/texture_renderer.hpp>
+#include <iaengine/components/transform.hpp>
 
 namespace iae
 {
-  struct SpriteComponent
+  auto TextureRendererSystem::update(EntityRegistry &registry, RenderProvider &render) -> void
   {
-    using AnimationFrame = TextureComponent;
+    auto view = registry.view<WorldTransformComponent, TextureComponent>();
 
-    struct Animation
+    for (const auto entity : view)
     {
-      Vec<AnimationFrame> frames;
-      f32 frame_rate;
-    };
+      const auto &transform = view.get<WorldTransformComponent>(entity);
+      const auto &texture = view.get<TextureComponent>(entity);
+      render.draw_quad(transform.position, transform.scale, texture.handle, texture.color);
+    }
+  }
+}
 
-    Vec<Animation> animations;
-  };
-} // namespace iae

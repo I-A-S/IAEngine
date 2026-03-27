@@ -28,7 +28,7 @@ namespace iae
     auto view = registry.view<HierarchyComponent, LocalTransformComponent, WorldTransformComponent>();
     view.use<HierarchyComponent>();
 
-    for (auto entity : view)
+    for (const auto entity : view)
     {
       bool is_dirty = registry.any_of<DirtyTransformTag>(entity);
 

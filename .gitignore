@@ -1,7 +1,9 @@
 .clangd/
 .cache/
 .local/
+
 build/
 out/
+sandbox/res
 
 compile_commands.json

@@ -27,7 +27,7 @@ namespace iae
     if AU_UNLIKELY (!m_window_handle)
       return;
 
-    SDL_SetWindowSize((SDL_Window *) m_window_handle, m_width, m_height);
+    SDL_SetWindowSize(static_cast<SDL_Window *>(m_window_handle), m_width, m_height);
   }
 
   auto DisplayProvider::initialize() -> Result<void>
@@ -51,12 +51,27 @@ namespace iae
 
   auto DisplayProvider::terminate() -> void
   {
-    SDL_DestroyWindow((SDL_Window *) m_window_handle);
-
+    SDL_DestroyWindow(static_cast<SDL_Window *>(m_window_handle));
+    m_window_handle = nullptr;
     SDL_Quit();
   }
 
   auto DisplayProvider::process_event(const SDL_Event &event) -> void
   {
+    switch (event.type)
+    {
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+      // [IATODO]: Notify Engine
+      break;
+
+    case SDL_EVENT_WINDOW_RESIZED: {
+      m_width = event.window.data1;
+      m_height = event.window.data2;
+      // [IATODO]: Notify Renderer
+    }
+      break;
+
+    default:break;
+    }
   }
 } // namespace iae

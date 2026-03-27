@@ -13,13 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "iaengine/components/sprite.hpp"
+
 #include <iaengine/engine.hpp>
 
 #include <iaengine/providers/input.hpp>
 #include <iaengine/components/transform.hpp>
 
 #include <SDL3/SDL.h>
-#include <imgui.h>
 
 namespace iae
 {
@@ -31,7 +32,7 @@ namespace iae
   {
     Vec2 axis_input{};
 
-    auto &input = Engine::instance().get_input_provider();
+    const auto &input = Engine::instance().get_input_provider();
     if (input.is_key_active(SDL_SCANCODE_W))
       axis_input.y += delta_time;
     if (input.is_key_active(SDL_SCANCODE_S))
@@ -41,9 +42,7 @@ namespace iae
     if (input.is_key_active(SDL_SCANCODE_D))
       axis_input.x += delta_time;
 
-    auto view = registry.view<PlayerTag>();
-
-    for (auto player : view)
+    for (const auto view = registry.view<PlayerTag>(); const auto player : view)
     {
       auto &transform = registry.get<LocalTransformComponent>(player);
 
@@ -61,10 +60,13 @@ namespace iae
 
     AU_TRY_DISCARD(Engine::instance().initialize());
 
-    logger.info("successfully intiailized the engine");
+    logger.info("successfully initialized the engine");
+
+    const auto texture = AU_TRY(Engine::instance().get_asset_provider().create_texture_from_file("images/ui/Shop/1x/Asset 1 - 1080p.png"));
 
     const auto player = Engine::instance().create_entity("player");
     Engine::instance().add_component_to_entity<PlayerTag>(player);
+    Engine::instance().add_component_to_entity<TextureComponent>(player, texture, Color{});
 
     bool running = true;
     f32 delta_time = 0.0f;
@@ -76,7 +78,7 @@ namespace iae
       if (Engine::instance().get_input_provider().was_key_pressed(SDL_SCANCODE_ESCAPE))
         running = false;
 
-      const auto current_frame = ((f32) SDL_GetTicks()) / 1000.0f;
+      const auto current_frame = static_cast<f32>(SDL_GetTicks()) / 1000.0f;
       delta_time = current_frame - last_frame;
       last_frame = current_frame;
 
@@ -97,8 +99,7 @@ int main(int argc, char *argv[])
 {
   au::auxid::MainThreadGuard _thread_guard;
 
-  const auto res = iae::main();
-  if (!res)
+  if (const auto res = iae::main(); !res)
   {
     au::auxid::get_thread_logger().error("%s", res.error().c_str());
     return -1;

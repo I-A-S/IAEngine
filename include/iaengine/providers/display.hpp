@@ -25,7 +25,7 @@ public:
     auto resize(i32 width, i32 height) -> void;
 
 public:
-    auto get_window_handle() -> void *
+    auto get_window_handle() const -> void *
     {
       return m_window_handle;
     }

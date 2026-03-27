@@ -7,6 +7,8 @@ set(SRC_FILES
     cpp/providers/input.cpp
     cpp/providers/render.cpp
     cpp/providers/display.cpp
+
+        cpp/systems/texture_renderer.cpp
 )
 
 add_library(IAEngine STATIC ${SRC_FILES})

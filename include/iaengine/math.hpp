@@ -28,4 +28,6 @@ namespace iae
   using IVec2 = glm::ivec2;
   using IVec3 = glm::ivec3;
   using IVec4 = glm::ivec4;
+
+  using Mat4 = glm::mat4;
 } // namespace iae

@@ -41,9 +41,9 @@ public:
     auto resize(i32 width, i32 height) -> void;
 
 public:
-    auto create_entity(String debug_name = "") -> EntityID;
+    auto create_entity(const String &debug_name = "") -> EntityID;
     auto attach_entity_to_parent(EntityID entity, EntityID parent) -> void;
-    auto deatach_entity_from_parent(EntityID entity) -> void;
+    auto detach_entity_from_parent(EntityID entity) -> void;
 
     inline auto get_entity_registry() -> EntityRegistry &;
 

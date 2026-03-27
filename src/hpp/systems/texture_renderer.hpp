@@ -15,20 +15,14 @@
 
 #pragma once
 
+#include <iaengine/providers/render.hpp>
 #include <iaengine/components/texture.hpp>
 
 namespace iae
 {
-  struct SpriteComponent
+  class TextureRendererSystem
   {
-    using AnimationFrame = TextureComponent;
-
-    struct Animation
-    {
-      Vec<AnimationFrame> frames;
-      f32 frame_rate;
-    };
-
-    Vec<Animation> animations;
+  public:
+    auto update(EntityRegistry &registry, RenderProvider &render) -> void;
   };
-} // namespace iae
+}

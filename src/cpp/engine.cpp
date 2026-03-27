@@ -16,6 +16,7 @@
 #include <iaengine/engine.hpp>
 
 #include <systems/transform.hpp>
+#include <systems/texture_renderer.hpp>
 
 #include <SDL3/SDL_events.h>
 
@@ -30,6 +31,8 @@ namespace iae
 namespace iae
 {
   TransformSystem g_transform_system{};
+  TextureRendererSystem g_texture_renderer_system{};
+
 
   auto Engine::initialize() -> Result<void>
   {
@@ -60,6 +63,8 @@ namespace iae
     g_transform_system.update(m_entity_registry);
 
     m_render_provider.begin_frame();
+
+    g_texture_renderer_system.update(m_entity_registry, m_render_provider);
 
     m_render_provider.end_frame();
 
@@ -95,7 +100,7 @@ namespace iae
 
 namespace iae
 {
-  auto Engine::create_entity(String debug_name) -> EntityID
+  auto Engine::create_entity(const String &debug_name) -> EntityID
   {
     DebugInfoComponent dbg_info{};
     if (debug_name.empty())
@@ -134,7 +139,7 @@ namespace iae
 
   auto Engine::attach_entity_to_parent(EntityID entity, EntityID parent) -> void
   {
-    deatach_entity_from_parent(entity);
+    detach_entity_from_parent(entity);
 
     auto &parent_h = m_entity_registry.get<HierarchyComponent>(parent);
     auto &child_h = m_entity_registry.get<HierarchyComponent>(entity);
@@ -156,7 +161,7 @@ namespace iae
     m_entity_registry.ctx().emplace<HierarchyChangedTag>();
   }
 
-  auto Engine::deatach_entity_from_parent(EntityID entity) -> void
+  auto Engine::detach_entity_from_parent(EntityID entity) -> void
   {
     auto &h = m_entity_registry.get<HierarchyComponent>(entity);
     if (h.parent == NULL_ENTITY)

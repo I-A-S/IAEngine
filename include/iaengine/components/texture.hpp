@@ -15,20 +15,13 @@
 
 #pragma once
 
-#include <iaengine/components/texture.hpp>
+#include <iaengine/color.hpp>
 
 namespace iae
 {
-  struct SpriteComponent
+  struct TextureComponent
   {
-    using AnimationFrame = TextureComponent;
-
-    struct Animation
-    {
-      Vec<AnimationFrame> frames;
-      f32 frame_rate;
-    };
-
-    Vec<Animation> animations;
+    ResourceHandle handle{NULL_RESOURCE};
+    Color color{};
   };
 } // namespace iae
