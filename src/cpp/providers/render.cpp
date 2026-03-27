@@ -687,9 +687,10 @@ namespace iae
 
     AU_TRY_DISCARD(create_default_resources());
 
-    m_active_sampler = m_sampler_handle_clamp;
+    m_render_state.sampler = m_sampler_handle_clamp;
 
-    m_projection_matrix = glm::ortho(0.0f, static_cast<float>(m_width), 0.0f, static_cast<float>(m_height));
+    m_render_state.projection_matrix =
+      glm::orthoLH(0.0f, static_cast<f32>(m_width), static_cast<f32>(m_height), 0.0f, -1.0f, 1.0f);
 
     return {};
   }
@@ -753,7 +754,11 @@ namespace iae
 
     reinterpret_cast<Pipeline *>(&m_geometry_pipeline_handle)->bind(renderpass);
 
-    SDL_PushGPUVertexUniformData(cmdbuffer, 0, &m_projection_matrix, sizeof(m_projection_matrix));
+    SDL_PushGPUVertexUniformData(cmdbuffer, 0, &m_render_state.projection_matrix,
+                                 sizeof(m_render_state.projection_matrix));
+
+    Mat4 camera_matrix = glm::lookAtLH(Vec3(m_render_state.camera_position, -1.0f), Vec3(m_render_state.camera_position, 0.0f), Vec3(0, 1, 0));
+    SDL_PushGPUVertexUniformData(cmdbuffer, 1, &camera_matrix, sizeof(camera_matrix));
 
     m_cmdbuffer_handle = cmdbuffer;
     m_renderpass_handle = renderpass;
@@ -776,21 +781,22 @@ namespace iae
     if (!force_resize && (width == m_width) && (height == m_height))
       return;
 
-    m_projection_matrix = glm::ortho(0.0f, static_cast<float>(m_width), 0.0f, static_cast<float>(m_height));
+    m_render_state.projection_matrix =
+      glm::orthoLH(0.0f, static_cast<f32>(m_width), static_cast<f32>(m_height), 0.0f, -1.0f, 1.0f);
   }
 
   auto RenderProvider::set_render_state_sampler_clamp() -> void
   {
-    m_active_sampler = reinterpret_cast<ResourceHandle>(m_sampler_handle_clamp);
+    m_render_state.sampler = reinterpret_cast<ResourceHandle>(m_sampler_handle_clamp);
   }
 
   auto RenderProvider::set_render_state_sampler_repeat() -> void
   {
-    m_active_sampler = reinterpret_cast<ResourceHandle>(m_sampler_handle_repeat);
+    m_render_state.sampler = reinterpret_cast<ResourceHandle>(m_sampler_handle_repeat);
   }
 
   auto RenderProvider::draw_geometry(const GeometryResource &geometry, const Vec2 &position, const Vec2 &size,
-                                     ResourceHandle texture, const Color &color) -> void
+                                     f32 rotation, ResourceHandle texture, const Color &color) -> void
   {
 #pragma pack(push, 1)
 
@@ -807,20 +813,31 @@ namespace iae
     const auto cmdbuffer = static_cast<SDL_GPUCommandBuffer *>(m_cmdbuffer_handle);
     const auto renderpass = static_cast<SDL_GPURenderPass *>(m_renderpass_handle);
 
-    glm::mat4 m{1.0f};
-
-    SDL_PushGPUVertexUniformData(cmdbuffer, 1, &m, sizeof(m));
-    SDL_PushGPUVertexUniformData(cmdbuffer, 2, &m, sizeof(m));
+    Mat4 model = glm::translate(Mat4(1.0f), Vec3(position.x, position.y, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation), Vec3(0, 0, 1));
+    model = glm::scale(model, Vec3(size.x, size.y, 1.0f));
+    SDL_PushGPUVertexUniformData(cmdbuffer, 2, &model, sizeof(model));
 
     SDL_GPUTextureSamplerBinding texture_binding{
         .texture = reinterpret_cast<SDL_GPUTexture *>(texture),
-        .sampler = reinterpret_cast<SDL_GPUSampler *>(m_active_sampler),
+        .sampler = reinterpret_cast<SDL_GPUSampler *>(m_render_state.sampler),
     };
     SDL_BindGPUFragmentSamplers(renderpass, 0, &texture_binding, 1);
+
+    s_fragment_uniform.color_overlay = color.to_normalized();
+    s_fragment_uniform.texture_offset = m_render_state.texture_offset;
+    s_fragment_uniform.flip_h = m_render_state.flip_x;
+    s_fragment_uniform.flip_v = m_render_state.flip_y;
     SDL_PushGPUFragmentUniformData(cmdbuffer, 0, &s_fragment_uniform, sizeof(s_fragment_uniform));
 
-    SDL_GPUBufferBinding buffer_bindings[] = {{.buffer = reinterpret_cast<SDL_GPUBuffer *>(geometry.vertex_buffer), .offset = 0,},
-                                                 {.buffer = reinterpret_cast<SDL_GPUBuffer *>(geometry.index_buffer), .offset = 0,}};
+    SDL_GPUBufferBinding buffer_bindings[] = {{
+                                                  .buffer = reinterpret_cast<SDL_GPUBuffer *>(geometry.vertex_buffer),
+                                                  .offset = 0,
+                                              },
+                                              {
+                                                  .buffer = reinterpret_cast<SDL_GPUBuffer *>(geometry.index_buffer),
+                                                  .offset = 0,
+                                              }};
     SDL_BindGPUVertexBuffers(renderpass, 0, buffer_bindings, 1);
     SDL_BindGPUIndexBuffer(renderpass, &buffer_bindings[1], SDL_GPU_INDEXELEMENTSIZE_32BIT);
     SDL_DrawGPUIndexedPrimitives(renderpass, geometry.index_count, 1, 0, 0, 0);
@@ -1047,10 +1064,10 @@ namespace iae
   {
     GeometryResource geometry;
 
-    geometry.vertex_buffer = AU_TRY(create_device_local_buffer(EBufferType::Vertex, vertices.size() * sizeof(GeometryVertex),
-                                                        reinterpret_cast<const u8 *>(vertices.data())));
+    geometry.vertex_buffer = AU_TRY(create_device_local_buffer(
+        EBufferType::Vertex, vertices.size() * sizeof(GeometryVertex), reinterpret_cast<const u8 *>(vertices.data())));
     geometry.index_buffer = AU_TRY(create_device_local_buffer(EBufferType::Index, indices.size() * sizeof(u32),
-                                                       reinterpret_cast<const u8 *>(indices.data())));
+                                                              reinterpret_cast<const u8 *>(indices.data())));
     geometry.index_count = indices.size();
 
     return geometry;

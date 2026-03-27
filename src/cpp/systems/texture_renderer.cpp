@@ -26,7 +26,7 @@ namespace iae
     {
       const auto &transform = view.get<WorldTransformComponent>(entity);
       const auto &texture = view.get<TextureComponent>(entity);
-      render.draw_quad(transform.position, transform.scale, texture.handle, texture.color);
+      render.draw_quad(transform.position, transform.scale, transform.rotation, texture.handle, texture.color);
     }
   }
 }

@@ -47,6 +47,7 @@ namespace iae
       auto &transform = registry.get<LocalTransformComponent>(player);
 
       transform.position += Vec3(axis_input, 0.0f);
+      transform.scale = Vec2{100.0f, 100.0f };
 
       registry.emplace<DirtyTransformTag>(player);
     }

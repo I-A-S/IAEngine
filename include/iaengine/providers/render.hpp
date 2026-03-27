@@ -23,6 +23,16 @@ namespace iae
 {
   class RenderProvider
   {
+    struct RenderState
+    {
+      bool flip_x{};
+      bool flip_y{};
+      Vec2 texture_offset{};
+      Vec2 camera_position{};
+      ResourceHandle sampler{};
+      Mat4 projection_matrix{};
+    };
+
   public:
     enum class EBufferType
     {
@@ -51,10 +61,10 @@ public:
     auto set_render_state_sampler_clamp() -> void;
     auto set_render_state_sampler_repeat() -> void;
 
-    inline auto draw_quad(const Vec2 &position, const Vec2 &size, ResourceHandle texture, const Color &color) -> void;
-    inline auto draw_circle(const Vec2 &position, const Vec2 &size, ResourceHandle texture, const Color &color) -> void;
+    inline auto draw_quad(const Vec2 &position, const Vec2 &size, f32 rotation, ResourceHandle texture, const Color &color) -> void;
+    inline auto draw_circle(const Vec2 &position, const Vec2 &size, f32 rotation, ResourceHandle texture, const Color &color) -> void;
 
-    auto draw_geometry(const GeometryResource &geometry, const Vec2 &position, const Vec2 &size, ResourceHandle texture, const Color &color) -> void;
+    auto draw_geometry(const GeometryResource &geometry, const Vec2 &position, const Vec2 &size, f32 rotation, ResourceHandle texture, const Color &color) -> void;
 
 public:
     auto create_texture(const u8 *rgba, i32 width, i32 height) -> Result<ResourceHandle>;
@@ -83,9 +93,7 @@ private:
     ResourceHandle m_sampler_handle_clamp{};
     ResourceHandle m_sampler_handle_repeat{};
 
-    ResourceHandle m_active_sampler{};
-
-    Mat4 m_projection_matrix{};
+    RenderState m_render_state{};
 
 private:
     auto begin_frame() -> void;
@@ -102,15 +110,15 @@ private:
     auto create_default_resources() -> Result<void>;
   };
 
-  auto RenderProvider::draw_quad(const Vec2 &position, const Vec2 &size, ResourceHandle texture, const Color &color)
+  auto RenderProvider::draw_quad(const Vec2 &position, const Vec2 &size,f32 rotation, ResourceHandle texture, const Color &color)
       -> void
   {
-    draw_geometry(m_geometry_handle_quad, position, size, texture, color);
+    draw_geometry(m_geometry_handle_quad, position, size, rotation, texture, color);
   }
 
-  auto RenderProvider::draw_circle(const Vec2 &position, const Vec2 &size, ResourceHandle texture, const Color &color)
+  auto RenderProvider::draw_circle(const Vec2 &position, const Vec2 &size,f32 rotation, ResourceHandle texture, const Color &color)
       -> void
   {
-    draw_geometry(m_geometry_handle_circle, position, size, texture, color);
+    draw_geometry(m_geometry_handle_circle, position, size, rotation, texture, color);
   }
 } // namespace iae
